@@ -6,10 +6,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PostagemService {
 
+  // Todo módulo que deve ser importado no typescript tem que colocal-lo no CONSTRUTOR.
   constructor(private http: HttpClient) { }
 
   /*
-  CRUD - Create, Ready, Update, Delete
+  CRUD - Create, Read, Update, Delete
+
+  endPoint - Um ponto onde me faz acessar o back-end (servidor) que esta na nuvem ou em um localHost
+
   */
 
   /*Esse método pode ser qualquer nome mas para ficar claro tem que ser nomes obvios
