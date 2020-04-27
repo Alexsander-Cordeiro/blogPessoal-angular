@@ -9,7 +9,9 @@ import { Postagem } from '../model/Postagem';
 })
 export class FeedComponent implements OnInit {
 
-  listaPostagens: Postagem []
+  listaPostagens: Postagem [];
+
+  postagem: Postagem = new Postagem;
 
   // Tudo que fazer no CONSTRUTOR é injeção de dependência
   constructor(private postagemService: PostagemService) { }
@@ -18,10 +20,18 @@ export class FeedComponent implements OnInit {
   ngOnInit() {
     this.findallPostagens()
   }
-
+                              // subscribe ele inseri na variavel "resp" o objeto que quero enviar.
   findallPostagens(){
     this.postagemService.getAllPostagens().subscribe((resp: Postagem []) => {
       this.listaPostagens = resp
     })
   }
+
+  publicar() {
+    this.postagemService.postPostagem(this.postagem).subscribe((resp: Postagem)=>{
+      this.postagem = resp
+      location.assign('/feed')
+    })
+  }
+
 }
