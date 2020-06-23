@@ -1,4 +1,4 @@
-export class Postagem{
+export class Postagens{
 
     // Atributos da API
     public id:number

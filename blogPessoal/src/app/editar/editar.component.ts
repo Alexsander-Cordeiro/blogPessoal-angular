@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PostagemService } from '../service/postagem.service';
-import { Postagem } from '../model/Postagem';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Postagens } from '../model/Postagens';
 
 @Component({
   selector: 'app-editar',
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class EditarComponent implements OnInit {
 
-  postagem: Postagem = new Postagem
+  postagens: Postagens = new Postagens
 
   constructor(private postagemService: PostagemService, private route: ActivatedRoute,
      private router: Router) { }
@@ -22,14 +22,14 @@ export class EditarComponent implements OnInit {
   }
 
   findById(id:number){
-    this.postagemService.getByIdPostagem(id).subscribe((resp: Postagem)=>{
-      this.postagem = resp
+    this.postagemService.getByIdPostagem(id).subscribe((resp: Postagens)=>{
+      this.postagens = resp
     })
   }
 
   salvar(){
-    this.postagemService.putPostagem(this.postagem).subscribe((resp: Postagem)=>{
-      this.postagem = resp
+    this.postagemService.putPostagem(this.postagens).subscribe((resp: Postagens)=>{
+      this.postagens = resp
       this.router.navigate(['/feed'])
       location.assign('/feed')
       

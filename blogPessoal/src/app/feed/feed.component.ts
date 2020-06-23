@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PostagemService } from '../service/postagem.service';
-import { Postagem } from '../model/Postagem';
+import {Postagens } from '../model/Postagens';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-feed',
@@ -9,60 +11,75 @@ import { Postagem } from '../model/Postagem';
 })
 export class FeedComponent implements OnInit {
 
+  nome: string = localStorage.getItem('nome')
+  
   key = 'data'
   reverse = true
 
-  listaPostagens: Postagem [];
+  postagens: Postagens = new Postagens;
 
-  postagem: Postagem = new Postagem;
+  listaPostagens: Postagens[]
 
   alerta: boolean = false
+
+  pesquisa: boolean = false
 
   titulo:string
 
   // Tudo que fazer no CONSTRUTOR é injeção de dependência
-  constructor(private postagemService: PostagemService) { }
+  constructor(
+    private postagemService: PostagemService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private locationPage: Location) { }
 
   // Tudo que fizer no ngOnInit é aquilo que vai ser carregado quando abrir minha aplicação.
   ngOnInit() {
-    this.findallPostagens()
+
+    let token = localStorage.getItem('token');
+
+    if(token == null){
+      alert('Faça o login antes de acessar a página de feed')
+      this.router.navigate(['/login']);
+    }
 
     let item:string = localStorage.getItem('delOk')
 
     if(item == "true"){
       this.alerta = true
-      localStorage.clear()
-
+      localStorage.removeItem('delOk')
       // Depois de 3 segundos a pagina vai ser atualizada
       setTimeout(()=>{
-        location.assign('/feed') 
+        this.refresh() 
       }, 3000)
-     
+         
+
+
     }
 
 
   }
-                              // subscribe ele inseri na variavel "resp" o objeto que quero enviar.
-  findallPostagens(){
 
-    window.scroll(0,0)
-
-    this.postagemService.getAllPostagens().subscribe((resp: Postagem []) => {
-      this.listaPostagens = resp
-    })
-  }
 
   publicar() {
-    this.postagemService.postPostagem(this.postagem).subscribe((resp: Postagem)=>{
-      this.postagem = resp
-      location.assign('/feed')
+    this.postagemService.postPostagem(this.postagens).subscribe((resp: Postagens)=>{
+      this.postagens = resp
+      this.refresh()
     })
   }
 
   pesquisarPorTitulo(){
-    this.postagemService.findByTitulo(this.titulo).subscribe((resp: Postagem[])=>{
+    this.postagemService.findByTitulo(this.titulo).subscribe((resp: Postagens[])=>{
       this.listaPostagens = resp
+      this.pesquisa = true
 
+    })
+  }
+
+  refresh(){
+    this.router.navigateByUrl('/lista-post',{skipLocationChange: true})
+    .then(()=>{
+      this.router.navigate([this.locationPage.path()])
     })
   }
 

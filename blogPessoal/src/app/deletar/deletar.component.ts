@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Postagem } from '../model/Postagem';
+import { Postagens } from '../model/Postagens';
 import { PostagemService } from '../service/postagem.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,21 +10,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DeletarComponent implements OnInit {
 
-  postagem: Postagem = new Postagem
+  postagens: Postagens = new Postagens
 
   delOk: boolean = false
 
   constructor(private postagemService: PostagemService, private route: ActivatedRoute, 
     private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit(){
+   
+   
     let id:number = this.route.snapshot.params['id']
-    this.findById(id)
+    this.findById(id);
+
+
+ 
   }
 
   findById(id:number){
-    this.postagemService.getByIdPostagem(id).subscribe((resp: Postagem)=>{
-      this.postagem = resp
+    this.postagemService.getByIdPostagem(id).subscribe((resp: Postagens)=>{
+      this.postagens = resp
     },
     err => {
       console.log(`Erro: ${err.status}, não conseguimos pegar o id`)
@@ -32,8 +37,9 @@ export class DeletarComponent implements OnInit {
   }
 
   btnSim(){
-    this.postagemService.deletePostagem(this.postagem.id).subscribe(()=>{
+    this.postagemService.deletePostagem(this.postagens.id).subscribe(()=>{
       this.delOk = true
+      let token = localStorage.getItem('token');
       this.router.navigate(['feed'])
       // "delOk" é um titulo que ficara no localStorage, pode ser qualquer nome
       localStorage.setItem("delOk", this.delOk.toString())

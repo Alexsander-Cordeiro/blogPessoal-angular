@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Postagem } from '../model/Postagem';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Postagens } from '../model/Postagens';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostagemService {
+
+  token = {
+    headers: new HttpHeaders().set('Authorization',localStorage.getItem('token'))
+  };
+
 
   // Todo módulo que deve ser importado no typescript tem que colocal-lo no CONSTRUTOR.
   constructor(private http: HttpClient) { }
@@ -20,30 +25,31 @@ export class PostagemService {
   /*Esse método pode ser qualquer nome mas para ficar claro tem que ser nomes obvios
   como esse abaixo 'pegue todas as postagens' */
 
+
   getAllPostagens() {
-    return this.http.get('http://31.220.57.14:8080/postagens')
+    return this.http.get('http://localhost:8080/postagens', this.token)
 
   }
 
-  postPostagem(postagem: Postagem){
-    return this.http.post('http://31.220.57.14:8080/postagens', postagem)
+  postPostagem(postagens: Postagens){
+    return this.http.post('http://localhost:8080/postagens', postagens, this.token)
   }
 
-  putPostagem(postagem: Postagem){
-    return this.http.put('http://31.220.57.14:8080/postagens', postagem)
+  putPostagem(postagens: Postagens){
+    return this.http.put('http://localhost:8080/postagens', postagens,this.token)
 
   }
 
   getByIdPostagem(id:number){
-    return this.http.get(`http://31.220.57.14:8080/postagens/${id}`)
+    return this.http.get(`http://localhost:8080/postagens/${id}`,this.token)
   }
 
   deletePostagem(id:number){
-    return this.http.delete(`http://31.220.57.14:8080/postagens/${id}`)
+    return this.http.delete(`http://localhost:8080/postagens/${id}`,this.token)
   }
 
   findByTitulo(titulo:string){
-    return this.http.get(`http://31.220.57.14:8080/postagens/titulo/${titulo}`)
+    return this.http.get(`http://localhost:8080/postagens/titulo/${titulo}`,this.token)
   }
 
 }

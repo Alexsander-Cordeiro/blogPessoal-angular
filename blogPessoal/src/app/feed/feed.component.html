@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="card-body">
-                    <h5 class="card-title text-center">Alexsander de S. Cordeiro</h5>
+                    <h5 class="card-title text-center">{{nome}}</h5>
 
                     <p class="card-text">Estudante do bootcamp voltado para desenvolvedor Full Stack java jr na Generation Brasil</p>
 
@@ -43,14 +43,14 @@
                 <div class="form-group">
 
                     <label for="titulo" class="text-monospace">Título</label>
-                    <input type="text" name="titulo" id="titulo" class="form-control mb-3" placeholder="Digite seu titulo" [(ngModel)]="postagem.titulo">
+                    <input type="text" name="titulo" id="titulo" class="form-control mb-3" placeholder="Digite seu titulo" [(ngModel)]="postagens.titulo">
 
                 </div>
 
                 <div class="form-group">
 
                     <label for="texto" class="text-monospace">Texto</label>
-                    <textarea name="texto" id="texto" cols="30" rows="4" class="form-control" placeholder="Digite seu texto" [(ngModel)]="postagem.texto"></textarea>
+                    <textarea name="texto" id="texto" cols="30" rows="4" class="form-control" placeholder="Digite seu texto" [(ngModel)]="postagens.texto"></textarea>
 
                 </div>
 
@@ -59,54 +59,63 @@
                 </div>
             </div>
 
-            <hr class="mt-5 mb-5">
-
-            <h3 class="text-monospace text-center mb-5">Minhas postagens</h3>
-
             <div *ngIf='alerta'>
                 <div class="alert alert-danger" role="alert">
                     Postagem deletada com sucesso!
                 </div>
             </div>
+            <!------------------------- IF ---------------------->
+            <!-- Se for uma lista de pesquisa faça isso -->
+            <div *ngIf='pesquisa; else listaPadrao'>
+
+                <h3 class="text-monospace text-center mb-5">Minhas postagens</h3>
+
+                <div class="card mb-4" *ngFor='let postagem of listaPostagens | orderBy: key: reverse'>
 
 
-            <div class="card mb-4" *ngFor='let postagem of listaPostagens | orderBy: key: reverse'>
+                    <div class="card-header">
+                        <div class="row">
+
+                            <div class="col-md-8">
+                                <h5>{{postagens.titulo}}</h5>
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-info mr-3" [routerLink]="['/editar',postagem.id]">
+                    Editar</button>
+
+                                <button class="btn btn-outline-danger" [routerLink]="['/deletar', postagem.id]">
+                    Apagar</button>
+                            </div>
 
 
-                <div class="card-header">
-                    <div class="row">
-
-                        <div class="col-md-8">
-                            <h5>{{postagem.titulo}}</h5>
-
-                        </div>
-
-                        <div class="col-md-4">
-                            <button class="btn btn-outline-info mr-3" [routerLink]="['/editar',postagem.id]">
-                                Editar</button>
-
-                            <button class="btn btn-outline-danger" [routerLink]="['/deletar', postagem.id]">
-                                Apagar</button>
                         </div>
 
 
                     </div>
 
 
-                </div>
+                    <div class="card-body">
+                        <p class="card-text">{{postagens.texto}}</p>
 
+                        <small class="form-text m-0 text-muted mb-3 text-monospace">
+                         Postagem em {{postagens.data | date: 'dd/MM/yyyy'}}
+                         às {{postagens.data | date: 'HH:mm'}}
+                        </small>
 
-                <div class="card-body">
-                    <p class="card-text">{{postagem.texto}}</p>
-
-                    <small class="form-text m-0 text-muted mb-3 text-monospace">
-                       Postagem em {{postagem.data | date: 'dd/MM/yyyy'}}
-                        às {{postagem.data | date: 'HH:mm'}}
-                     </small>
+                    </div>
 
                 </div>
 
             </div>
+
+            <!-- Se não, mostre a lista-post  -->
+            <ng-template #listaPadrao>
+                <app-lista-post></app-lista-post>
+            </ng-template>
+
+
 
         </div>
 

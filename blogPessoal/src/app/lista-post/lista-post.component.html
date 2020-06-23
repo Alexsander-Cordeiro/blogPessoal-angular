@@ -1,0 +1,39 @@
+<h3 class="text-monospace text-center mb-5">Minhas postagens</h3>
+
+<div class="card mb-4" *ngFor='let postagens of listaPostagens | orderBy: key: reverse'>
+
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5>{{postagens.titulo}}</h5>
+
+            </div>
+
+            <div class="col-md-4">
+                <button class="btn btn-outline-info mr-3" [routerLink]="['/editar',postagens.id]">
+                    Editar</button>
+
+                <button class="btn btn-outline-danger" [routerLink]="['/deletar', postagens.id]">
+                    Apagar</button>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="card-body">
+        <p class="card-text">{{postagens.texto}}</p>
+
+        <small class="form-text m-0 text-muted mb-3 text-monospace">
+           Postagem em {{postagens.data | date: 'dd/MM/yyyy'}}
+            às {{postagens.data | date: 'HH:mm'}}
+        </small>
+
+    </div>
+
+</div>
